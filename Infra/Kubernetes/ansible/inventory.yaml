@@ -1,0 +1,40 @@
+all:
+  children:
+     kub_master_nodes:
+       hosts:
+        kub-master-1:
+          ansible_host: 192.168.70.48
+          cluster_net_addr: 10.10.30.48
+        kub-master-2:
+          ansible_host: 192.168.70.49
+          cluster_net_addr: 10.10.30.49
+        kub-master-3:
+          ansible_host: 192.168.70.50
+          cluster_net_addr: 10.10.30.50
+
+     kub_loadbalancers_nodes:
+       hosts:
+         kub-lb-1:
+           ansible_host: 192.168.70.51
+           cluster_net_addr: 10.10.30.51
+           vrrp_role: "master"
+           vrrp_net_addr: 10.10.30.51
+         kub-lb-2:
+           ansible_host: 192.168.70.52
+           cluster_net_addr: 10.10.30.52
+           vrrp_role: "slave"
+           vrrp_net_addr: 10.10.30.52
+
+     kub_worker_nodes:
+       hosts:
+        kub-worker-1:
+          ansible_host: 192.168.70.53
+          cluster_net_addr: 10.10.30.53
+        kub-worker-2:
+          ansible_host: 192.168.70.54
+          cluster_net_addr: 10.10.30.54    
+                          
+  vars:
+      ansible_user: deploy
+      ansible_connection: ssh 
+      ansible_python_interpreter : /usr/bin/python3.12   
