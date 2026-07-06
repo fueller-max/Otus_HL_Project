@@ -1,0 +1,45 @@
+
+
+Power-OFF Sequence
+
+1. Unmount clients
+
+```bash
+sudo umount /mnt/cephfs
+sudo umount /mnt/rbd-disk1
+```
+
+2. Set Cluster Flags to Pause OSD Operations
+
+```bash
+sudo ceph osd set noout
+sudo ceph osd set norecover
+sudo ceph osd set nobackfill
+```
+
+3.  Stop All Ceph Daemons (The Order Matters)
+
+```bash
+sudo systemctl stop ceph.target
+```
+
+Power-On Sequence (Switch Back On)
+
+1. Power On the Hosts in Order
+
+Boot your virtual machines/servers in this sequence:
+* ceph-1 (Let it fully boot first so the leader monitor comes online)
+* ceph-2
+* ceph-3
+
+2. Clear the Safety Flags
+
+sudo ceph osd unset noout
+sudo ceph osd unset norecover
+sudo ceph osd unset nobackfill
+
+3. Verify and Remount
+
+```bash
+sudo ceph -s
+```
