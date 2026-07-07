@@ -12,5 +12,5 @@
   hosts: balancers
   become: true
   roles:
-       # - role: haproxy
+        - role: haproxy
         - role: keepalived     

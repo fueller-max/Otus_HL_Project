@@ -4,12 +4,15 @@ After=network.target
 Wants=network-online.target
  
 [Service]
+Type=simple
 User=postgres
 Type=simple
-ExecStart=/usr/bin/patroni /etc/patroni/config.yml.in
+ExecStart=/usr/bin/patroni /etc/patroni/config.yml
+KillMode=process
+TimeoutSec=30
 Restart=always
 RestartSec=5
-LimitNOFILE=1024
- 
+LimitNOFILE=65536
+
 [Install]
 WantedBy=multi-user.target

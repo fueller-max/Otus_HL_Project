@@ -7,26 +7,26 @@
 
 - name: Create directory for log files
   ansible.builtin.file:
-        path: /var/log/patroni
-        state: directory
-        owner: postgres
-        group: postgres
-        mode: '0755'
+    path: /var/log/patroni
+    state: directory
+    owner: postgres
+    group: postgres
+    mode: '0755'
   tags: always
 
 - name: Create directory for postgres in home
   ansible.builtin.file:
-        path: /home/postgres/
-        state: directory
-        owner: postgres
-        group: postgres
-        mode: '0755'
+    path: /home/postgres/
+    state: directory
+    owner: postgres
+    group: postgres
+    mode: '0755'
   tags: always
 
 - name: Render .pgpass_patroni template
   ansible.builtin.template:
     src: templates/.pgpass_patroni.j2
-    dest: /home/postgres/.pgpass_patroni
+    dest: /home/postgres/.pgpass
     mode: 0600
     owner: "postgres"
     group: "postgres"    
@@ -36,7 +36,7 @@
 - name: Render patroni config.yml templates
   ansible.builtin.template:
     src: templates/config.yml.in.j2
-    dest: /etc/patroni/config.yml.in
+    dest: /etc/patroni/config.yml
     mode: 0640
     owner: "postgres"
     group: "postgres"    
@@ -52,10 +52,9 @@
   tags: always  
 
 - name: Validate Patroni configuration with error details
-  ansible.builtin.command: patroni --validate-config /etc/patroni/config.yml.in
+  ansible.builtin.command: patroni --validate-config /etc/patroni/config.yml
   register: patroni_validation
   failed_when: patroni_validation.rc != 0
-  ignore_errors: yes
   tags: always 
 
 - name: Fail the playbook with error message
@@ -66,8 +65,8 @@
 
 - name: Render patroni systemd unit with dynamic cluster configuration
   ansible.builtin.template:
-        src: templates/patroni.service.j2
-        dest: /etc/systemd/system/patroni.service
+    src: templates/patroni.service.j2
+    dest: /etc/systemd/system/patroni.service
   tags: always
 
 - name: Force systemd to reread configs
@@ -77,8 +76,8 @@
 
 - name: Enable and start patroni service
   ansible.builtin.systemd:
-        name: patroni
-        state: restarted
-        enabled: yes
+    name: patroni
+    state: restarted
+    enabled: yes
   register: patroni_service_status
   tags: always 

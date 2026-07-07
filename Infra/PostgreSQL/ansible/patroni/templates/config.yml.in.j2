@@ -52,7 +52,7 @@ bootstrap:
       max_connections: 100
       effective_cache_size: '1GB'
       maintenance_work_mem: '256MB'
-      max_wal_senders: 3
+      max_wal_senders: 10
       max_replication_slots: 10
       checkpoint_completion_target: 0.7
       log_timezone: 'Europe/Moscow'
@@ -61,7 +61,6 @@ bootstrap:
       password_encryption: 'scram-sha-256'
       superuser_reserved_connections: 3
       synchronous_commit: 'on'
-      synchronous_standby_names: 'ANY 1 (...)'
       hot_standby: 'on'
       compute_query_id: 'on'
   initdb:
@@ -81,15 +80,16 @@ postgresql:
   data_dir: /var/lib/postgresql/{{ postgresql_major_version }}
   config_dir: /var/lib/postgresql/{{ postgresql_major_version }}/
   bin_dir: /usr/lib/postgresql/{{ postgresql_major_version }}/bin
-  pgpass: /home/postgres/.pgpass_patroni
   authentication:
     replication:
       username: replicator
-      password: {{ replicator_password }}
+      password: '{{ replicator_password }}'
     superuser:
       username: postgres
+      password: '{{ superuser_password }}'
     rewind:
       username: postgres
+      password: '{{ superuser_password }}'
   pg_hba:
     - local all all peer
     - host all all 127.0.0.1/32 scram-sha-256
