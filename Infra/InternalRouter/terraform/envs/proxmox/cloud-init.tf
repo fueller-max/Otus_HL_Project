@@ -74,7 +74,14 @@ resource "proxmox_vm_qemu" "cloud-init" {
     bridge = each.value.bridge6 
     tag = 0
   }
-
+  
+  network {                                  # Lan8:
+    id = 7
+    model = "virtio"
+    bridge = each.value.bridge7 
+    tag = 0
+  }
+ 
    
    
   disks {                                    # Setup disks
@@ -92,8 +99,7 @@ resource "proxmox_vm_qemu" "cloud-init" {
           storage    = "vmdata2"             # HDD storage
           replicate  = true
         }
-      }  
-                          
+      }                       
     }
   }
 
@@ -106,6 +112,7 @@ resource "proxmox_vm_qemu" "cloud-init" {
   ipconfig4 = each.value.ip_conf4
   ipconfig5 = each.value.ip_conf5
   ipconfig6 = each.value.ip_conf6
+  ipconfig7 = each.value.ip_conf7
 
   # Setup user / SSH key for access
   ciuser = "deploy"
