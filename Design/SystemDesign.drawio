@@ -1,6 +1,6 @@
 <mxfile host="app.diagrams.net">
   <diagram name="Page-1" id="A5w-lTScNQMh_YW98whM">
-    <mxGraphModel dx="2020" dy="1507" grid="0" gridSize="10" guides="1" tooltips="1" connect="0" arrows="1" fold="1" page="0" pageScale="1" pageWidth="2339" pageHeight="3300" background="#E6E6E6" math="0" shadow="1">
+    <mxGraphModel dx="4040" dy="2614" grid="0" gridSize="10" guides="1" tooltips="1" connect="0" arrows="1" fold="1" page="0" pageScale="1" pageWidth="2339" pageHeight="3300" background="#E6E6E6" math="0" shadow="1">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -726,6 +726,9 @@
         </mxCell>
         <mxCell id="XUXITdFGZRM87zLOtkCF-2" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="[Mgr]&amp;nbsp;" vertex="1">
           <mxGeometry height="30" width="254.5" x="1801" y="1036.5" as="geometry" />
+        </mxCell>
+        <mxCell id="cSqstdIaJ17AQuKLSdTi-1" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;rounded=0;" value="&lt;font style=&quot;font-size: 13px;&quot;&gt;vmbr0:&amp;nbsp; 192.168.70.101&lt;/font&gt;" vertex="1">
+          <mxGeometry height="30" width="144" x="3941" y="885" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
