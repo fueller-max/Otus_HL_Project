@@ -11,7 +11,7 @@
 ### Terraform ###
 # Local .terraform directories
 **/.terraform/*
-**/terraform/data/*
+#**/terraform/data/*
 .terraform.lock.hcl
 
 # .tfstate files
