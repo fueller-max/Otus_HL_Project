@@ -6,7 +6,7 @@ After=network.target
 Type=notify
 User=etcd
 Group=etcd
-PermissionsStartOnly=true
+
 
 ExecStart=/usr/local/bin/etcd \
   --name {{ inventory_hostname }} \
@@ -15,8 +15,7 @@ ExecStart=/usr/local/bin/etcd \
   --listen-client-urls http://{{ cluster_net_addr }}:{{ etcd_client_port }},http://127.0.0.1:{{ etcd_client_port }} \
   --advertise-client-urls http://{{ cluster_net_addr }}:{{ etcd_client_port }} \
   --initial-cluster-token etcd-cluster-1 \
-  --initial-cluster {{ etcd_cluster_string }}\
-  --initial-cluster-state new \
+  --initial-cluster {{ etcd_cluster_string }} \
   --data-dir /var/lib/etcd
 
 Restart=always
