@@ -1,35 +1,34 @@
 ---
-- name: Install iptables-persistent
+- name: Setup firewall(iptables) and enbale forwarding
   hosts: routers
   become: true
-  apt:
-    name: iptables-persistent
-    state: present
+  tasks:
+  
+    - name: Install iptables-persistent
+      ansible.builtin.apt:
+        name: iptables-persistent
+        state: present
 
-- name: Copy ipv4 rules
-  hosts: routers
-  become: true
-  template:
-    src: rules.v4.j2  
-    dest: /etc/iptables/rules.ipv4
-    owner: root
-    group: root 
-    mode: '0644' 
+    - name: Copy ipv4 rules
+      ansible.builtin.template:
+        src: rules.v4.j2  
+        dest: /etc/iptables/rules.ipv4
+        owner: root
+        group: root 
+        mode: '0644' 
  
-- name: Restore firewall rules
-  hosts: routers
-  become: true
-  shell: sudo iptables-restore < /etc/iptables/rules.ipv4
+    - name: Restore firewall rules
+      shell: sudo iptables-restore < /etc/iptables/rules.ipv4
 
-- name: Save rules persistent
-  hosts: routers
-  become: true
-  shell:   netfilter-persistent save
+    - name: Save rules persistent
+      shell:   netfilter-persistent save
 
-- name: Setup package forwarding
-  hosts: routers
-  become: true
-  sysctl:
-    name: net.ipv4.ip_forward
-    value: '1'
-    state: present
+    - name: Setup package forwarding
+      ansible.posix.sysctl:
+        name: net.ipv4.ip_forward
+        value: '1'
+        sysctl_file: /etc/sysctl.conf
+        state: present
+        reload: true
+
+       

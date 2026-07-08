@@ -27,6 +27,7 @@ all:
 
   vars:
     vip: "10.10.40.100" 
+    cluster_net: "10.10.40.0/24"
     ansible_user: deploy
     ansible_connection: ssh
     ansible_python_interpreter: /usr/bin/python3.12

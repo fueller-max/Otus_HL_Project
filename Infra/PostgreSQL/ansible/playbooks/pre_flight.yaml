@@ -1,0 +1,36 @@
+---
+- name: Basic hosts management. Setup routes, firewall and etc...
+  hosts: balancers
+  become: true
+  vars:
+    # 1. Targets the interface that matches the 10.10.x.x block
+    target_interface: >-
+      {{ 
+        ansible_interfaces 
+        | map('ansible.builtin.extract', ansible_facts) 
+        | selectattr('ipv4', 'defined') 
+        | selectattr('ipv4.address', 'match', '^10\.10\.') 
+        | map(attribute='device') 
+        | first 
+      }}
+    # 2. Extract active interface properties
+    host_ip: "{{ ansible_facts[target_interface]['ipv4']['address'] }}"
+    calculated_gateway: "{{ (host_ip.split('.'))[0:3] | join('.') }}.1"
+
+  tasks:
+    - name: Overwrite Netplan configuration with custom routing rules
+      ansible.builtin.template:
+        src: templates/netplan.yaml.j2
+        dest: /etc/netplan/50-cloud-init.yaml
+        owner: root
+        group: root
+        mode: '0600'
+      notify: Apply Netplan Configuration
+
+  handlers:
+    - name: Apply Netplan Configuration
+      ansible.builtin.command: netplan apply
+      async: 10   # Network-disconnect protection wrapper
+      poll: 0
+  
+   

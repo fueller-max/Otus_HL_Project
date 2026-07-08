@@ -54,7 +54,7 @@ terraform.rc
 # Exclude tokens files
 kube_enroll/
 *.tokens
-vault.txt 
+vault.pass
 
 #Exclude vault.seals
 vault.seals

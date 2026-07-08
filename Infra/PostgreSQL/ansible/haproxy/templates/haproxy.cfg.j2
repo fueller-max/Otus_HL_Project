@@ -10,11 +10,6 @@ defaults
     timeout server 30m
     timeout check 5s
 
-listen stats
-    mode http
-    bind *:7000
-    stats enable
-    stats uri /
 
 listen primary
     bind *:{{ ha_proxy_postgres_port_rw }}
@@ -34,3 +29,12 @@ listen standbys
     {% for host in groups['postgres'] %}       
     server node{{ loop.index }} {{ hostvars[host]['cluster_net_addr'] }}:5432 maxconn 100 check port 8008
     {% endfor %}
+
+listen stats
+    bind :8443
+    stats enable
+    mode http
+    stats uri /stats
+    stats realm Haproxy\ Statistics
+    stats auth admin:strongpassword
+

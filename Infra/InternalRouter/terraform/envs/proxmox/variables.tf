@@ -19,7 +19,6 @@ variable vm_configs{
     memory      =  number
     cores       =  number
     sockets     =  number
-    osd_size    =  string
     vm_state    =  string 
     bridge0     =  string
     bridge1     =  string
@@ -28,6 +27,7 @@ variable vm_configs{
     bridge4     =  string
     bridge5     =  string
     bridge6     =  string
+    bridge7     =  string
     ip_conf0    =  string
     ip_conf1    =  string
     ip_conf2    =  string
@@ -35,6 +35,7 @@ variable vm_configs{
     ip_conf4    =  string
     ip_conf5    =  string
     ip_conf6    =  string
+    ip_conf7    =  string
     start_at_node_boot =  bool
     
   }))
