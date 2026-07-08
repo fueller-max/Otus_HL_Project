@@ -1,4 +1,4 @@
 
 #### Task to fullfill:
 
-- [ ] Patroni: use Vault for secret storage
+- [ ] Patroni: Delete PostgeSQL group_vars/main.yaml with secrets!

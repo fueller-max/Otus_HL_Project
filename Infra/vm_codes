@@ -1,10 +1,10 @@
 VM codes for Proxmox:
 
-1. Ceph:        17x;
-2. Kubernetes:  15x;
-3. PostgreSQL   16x;
-4. ELK          14x
-5. Kafka        13x
-6. Monitoring   12x
+
+1. Kubernetes:  15x;
+2. PostgreSQL   16x;
+3. Ceph         17x 
+4. ELK          18x
+6. Monitoring   19x
 
 7. Routing      20x 

@@ -1,0 +1,26 @@
+---
+- name: Basic hosts management. Setup routes, firewall and etc...
+  hosts: nodes
+  become: true
+  vars:
+    # Safely extract eth1's network details directly
+    eth1_ip: "{{ ansible_facts['eth1']['ipv4']['address'] }}"
+    calculated_gateway: "{{ (eth1_ip.split('.'))[0:3] | join('.') }}.1"
+
+  tasks:
+    - name: Deploy multi-interface netplan config file
+      ansible.builtin.template:
+        src: templates/netplan.yaml.j2
+        dest: /etc/netplan/50-cloud-init.yaml
+        owner: root
+        group: root
+        mode: '0600'
+      notify: Apply Netplan Configuration
+
+  handlers:
+    - name: Apply Netplan Configuration
+      ansible.builtin.command: netplan apply
+      async: 10
+      poll: 0
+  
+   

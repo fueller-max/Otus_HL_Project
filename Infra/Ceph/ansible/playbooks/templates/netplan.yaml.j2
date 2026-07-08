@@ -1,0 +1,42 @@
+network:
+  version: 2
+  ethernets:
+    eth0:
+      match:
+        macaddress: "{{ ansible_facts['eth0']['macaddress'] }}"
+      addresses:
+        - "{{ ansible_facts['eth0']['ipv4']['address'] }}/24"
+      nameservers:
+        addresses:
+          - 8.8.8.8
+        search:
+          - maxhome.net
+      set-name: "eth0"
+      routes:
+        - to: "default"
+          via: "192.168.70.1"
+    eth1:
+      match:
+        macaddress: "{{ ansible_facts['eth1']['macaddress'] }}"
+      addresses:
+        - "{{ eth1_ip }}/24"
+      nameservers:
+        addresses:
+          - 8.8.8.8
+        search:
+          - maxhome.net
+      set-name: "eth1"
+      routes:
+        - to: "10.10.0.0/16"
+          via: "{{ calculated_gateway }}"
+    eth2:
+      match:
+        macaddress: "{{ ansible_facts['eth2']['macaddress'] }}"
+      addresses:
+        - "{{ ansible_facts['eth2']['ipv4']['address'] }}/24"
+      nameservers:
+        addresses:
+          - 8.8.8.8
+        search:
+          - maxhome.net
+      set-name: "eth2"
