@@ -8,11 +8,11 @@ upstream ceph_dashboard {
 
 server {
     listen       443 ssl;
-    server_name  ceph-dashboard.local;
+    server_name  {{domain_name}}
     status_zone single;
 
-	ssl_certificate /etc/angie/ssl/ceph-dashboard.local+1.pem;
-    ssl_certificate_key /etc/angie/ssl/ceph-dashboard.local+1-key.pem;
+	ssl_certificate "{{ ssl_dir }}/{{ domain_name }}.crt";
+    ssl_certificate_key "{{ ssl_dir }}/{{ domain_name }}.key";
 
     #access_log  /var/log/angie/host.access.log  main;
 

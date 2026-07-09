@@ -1,5 +1,5 @@
 ---
-- name: Setup proxy(Angie) for access to service`s diagnostic pages
+- name: Setup proxy(Angie) for access to sceph diagnostic pages
   hosts: routers
   become: true
   vars:
@@ -7,7 +7,8 @@
       - "10.10.80.91:8443"
       - "10.10.80.92:8443"
       - "10.10.80.93:8443"
-     
+    domain_name: "ceph-dashboard.local"  
+    ssl_dir: /etc/angie/ssl 
   tasks:
 
     - name: Install the prerequisites for adding the Angie repo
@@ -43,6 +44,38 @@
           - angie
           - angie-console-light    
       tags: [always]  
+    
+    - name: Ensure certificate and key directory exists
+      ansible.builtin.file:
+        path: '{{ ssl_dir }}'
+        state: directory
+        mode: '0755'
+    
+    - name: Generate an OpenSSL private key
+      community.crypto.openssl_privatekey:
+        path: "{{ ssl_dir }}/{{ domain_name }}.key"
+        size: 2048
+        type: RSA
+        mode: '0600'
+
+    - name: Generate an OpenSSL Certificate Signing Request (CSR)
+      community.crypto.openssl_csr:
+        path: "{{ ssl_dir }}/{{ domain_name }}.csr"
+        privatekey_path: "{{ ssl_dir }}/{{ domain_name }}.key"
+        common_name: "{{ domain_name }}"
+        subject_alt_name:
+          - "DNS:{{ domain_name }}"
+          - "DNS:www.{{ domain_name }}"
+        mode: '0644'
+
+    - name: Generate a self-signed OpenSSL certificate
+      community.crypto.x509_certificate:
+        path: "{{ ssl_dir }}/{{ domain_name }}.crt"
+        privatekey_path: "{{ ssl_dir }}/{{ domain_name }}.key"
+        csr_path: "{{ ssl_dir}}/{{ domain_name }}.csr"
+        provider: selfsigned
+        selfsigned_not_after: "+3650d" # Valid for 10 years
+        mode: '0644'    
 
     - name: Copy loadbalancing config for Angie
       ansible.builtin.template:

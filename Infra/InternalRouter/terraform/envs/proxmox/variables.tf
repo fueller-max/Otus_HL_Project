@@ -45,7 +45,7 @@ variable vm_configs{
         vm_id       =  202
         name        =  "router-internal-1"
         clone       =  "Ubuntu2404-12GB"
-        memory      =  6144
+        memory      =  2048
         cores       =  2
         sockets     =  2
         vm_state    =  "running" 

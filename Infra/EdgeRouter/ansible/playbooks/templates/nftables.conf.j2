@@ -1,0 +1,93 @@
+#!/usr/sbin/nft -f
+flush ruleset
+
+# define interfaces
+define wan_if  = "{{ WAN_IF }}"
+define dmz_if  = "{{ DMZ_IF }}"
+
+#define admin ip
+define admin_ip = "{{ admin_ip }}"
+
+#define service server in dmz
+define dmz_service_ip = "{{ dmz_service_ip }}"
+
+# TABLES
+table inet filter {
+
+     # Reusable logging and dropping mechanism
+     chain log_and_drop {
+         # Limit logging to 10 messages per minute, with a burst of 5 packets allowed
+        limit rate 10/minute burst 5 packets log prefix "NFTABLES-DROP: " flags all
+        
+        # Traffic is ALWAYS dropped, even if the logging limit is exceeded
+        drop
+     }
+
+     # ping with limitter
+     chain icmp_ping{
+        icmp type echo-request limit rate 5/second accept
+     }
+
+     # accept ssh for admin ip from wan side
+     chain input_wan {
+        ip saddr $admin_ip tcp dport ssh accept
+     }
+
+     #input for dmz
+     chain input_dmz {
+        jump icmp_ping
+     }
+
+     #common for established connections
+     chain allow_established {
+        ct state established, related accept
+     }
+
+     
+     chain input {
+        type filter hook input priority filter; policy drop;
+
+        ct state vmap { established : accept, related : accept, invalid : drop }
+        iifname vmap { lo : accept, $wan_if : jump input_wan, \
+                       $dmz_if : jump input_dmz}
+                       
+        # Log and drop everything else reaching the end of the forward chain
+        jump log_and_drop               
+     }
+
+     chain forward {
+        type filter hook forward priority filter; policy drop;
+        
+        # 1. Allow already established connections across interfaces
+        ct state vmap { established : accept, related : accept, invalid : drop }
+
+        # 2. Allow WAN to DMZ traffic explicitly for HTTP and HTTPS (Matches DNAT)
+        iifname $wan_if oifname $dmz_if ip daddr $dmz_service_ip tcp dport { {{ dmz_port_http }}, {{ dmz_port_https }} } accept
+
+        # 3. Allow DMZ to WAN traffic if the DMZ needs to initiate outbound connections
+        iifname $dmz_if oifname $wan_if accept
+
+        # Log and drop everything else reaching the end of the forward chain
+        jump log_and_drop
+
+     }
+
+     chain output {
+        type filter hook output priority filter; policy accept;
+     }
+}
+
+table ip nat {
+        chain prerouting {
+                type nat hook prerouting priority dstnat; policy accept;
+
+                 # Filter by WAN interface so local DMZ traffic doesn't accidentally trigger DNAT
+                iifname $wan_if tcp dport http dnat to $dmz_service_ip:{{ dmz_port_http }}
+                iifname $wan_if tcp dport https dnat to $dmz_service_ip:{{ dmz_port_https }}
+        }
+
+        chain postrouting {
+                type nat hook postrouting priority srcnat; policy accept;
+                oifname $wan_if   masquerade
+        }
+}
