@@ -46,14 +46,14 @@ bootstrap:
     use_pg_rewind: true
     use_slots: true
     parameters:
-      shared_buffers: '512MB'
+      shared_buffers: '256MB'        # Cut in half to free up physical RAM 
       wal_level: 'replica'
       wal_keep_size: '512MB'
-      max_connections: 100
-      effective_cache_size: '1GB'
-      maintenance_work_mem: '256MB'
-      max_wal_senders: 10
-      max_replication_slots: 10
+      max_connections: 40            # Reduced for lab use to cap potential connection memory  
+      effective_cache_size: '512MB'  # Lowered to leave room for OS/etcd/Patroni
+      maintenance_work_mem: '64MB'   # Lowered to prevent aggressive spikes during vacuuming
+      max_wal_senders: 5             # There are only 3 nodes
+      max_replication_slots: 5       # Scaled down to match senders
       checkpoint_completion_target: 0.7
       log_timezone: 'Europe/Moscow'
       timezone: 'Europe/Moscow'

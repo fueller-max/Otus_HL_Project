@@ -1,0 +1,60 @@
+---
+- name: Setup proxy(Angie) for access to service`s diagnostic pages
+  hosts: routers
+  become: true
+  vars:
+    ceph_nodes:
+      - "10.10.80.91:8443"
+      - "10.10.80.92:8443"
+      - "10.10.80.93:8443"
+     
+  tasks:
+
+    - name: Install the prerequisites for adding the Angie repo
+      apt: 
+        update_cache: true 
+        cache_valid_time: 3600
+        name:
+         - curl
+         - ca-certificates
+        state: present
+      tags: [always]  
+
+    - name: Download the public key of the Angie repo for package verification
+      ansible.builtin.shell: |
+        curl -o /etc/apt/trusted.gpg.d/angie-signing.gpg https://angie.software/keys/angie-signing.gpg
+      tags: [always]
+
+    - name: Add the Angie repo
+      ansible.builtin.shell: |
+        echo "deb https://download.angie.software/angie/$(. /etc/os-release && echo "$ID/$VERSION_ID $VERSION_CODENAME") main" \
+        | sudo tee /etc/apt/sources.list.d/angie.list > /dev/null
+      tags: [always]
+
+    - name: Update the repo indexes  
+      ansible.builtin.apt:
+        update_cache: yes
+        cache_valid_time: 0  
+      tags: [always]
+
+    - name: Install the Angie package && Console Light
+      ansible.builtin.apt:
+        name: 
+          - angie
+          - angie-console-light    
+      tags: [always]  
+
+    - name: Copy loadbalancing config for Angie
+      ansible.builtin.template:
+        src:  templates/default.conf.j2        
+        dest: /etc/angie/http.d/default.conf   
+        owner: root                           
+        group: root                           
+        mode: '0644'  
+      tags: [always]     
+    
+    - name: Restart Angie
+      systemd:
+        name: angie
+        state: restarted
+

@@ -1,0 +1,18 @@
+# 1. Pause Patroni monitoring (run on any node)
+sudo patronictl -c /etc/patroni/config.yml pause patroni_cluster
+
+# 2. Stop Patroni on ALL nodes (stops Postgres cleanly)
+sudo systemctl stop patroni
+
+# 3. Stop etcd on ALL nodes
+sudo systemctl stop etcd
+
+
+Handle the Post-Reboot Startup
+
+etcdctl endpoint health
+etcdctl member list
+
+sudo patronictl -c /etc/patroni/config.yml list
+
+sudo patronictl -c /etc/patroni/config.yml resume patroni_cluster

@@ -1,0 +1,87 @@
+upstream ceph_dashboard {
+    zone backend 1m;
+    server {{ ceph_nodes[0] }};  
+    server {{ ceph_nodes[1] }} backup;
+    server {{ ceph_nodes[2] }} backup;
+}
+
+
+server {
+    listen       443 ssl;
+    server_name  ceph-dashboard.local;
+    status_zone single;
+
+	ssl_certificate /etc/angie/ssl/ceph-dashboard.local+1.pem;
+    ssl_certificate_key /etc/angie/ssl/ceph-dashboard.local+1-key.pem;
+
+    #access_log  /var/log/angie/host.access.log  main;
+
+
+
+    location /{
+
+        proxy_pass https://ceph_dashboard ;
+		proxy_ssl_verify off;
+		# Required headers for Ceph Dashboard
+        proxy_set_header Host $http_host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    location /status/ {
+        api     /status/;
+        allow   127.0.0.1;
+        deny    all;
+    }
+
+    #error_page  404              /404.html;
+
+    # redirect server error pages to the static page /50x.html
+    #
+    error_page   500 502 503 504  /50x.html;
+    location = /50x.html {
+        root   /usr/share/angie/html;
+    }
+
+    # proxy the PHP scripts to Apache listening on 127.0.0.1:80
+    #
+    #location ~ \.php$ {
+    #    proxy_pass   http://127.0.0.1;
+    #}
+
+    # pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000
+    #
+    #location ~ \.php$ {
+    #    root           html;
+    #    fastcgi_pass   127.0.0.1:9000;
+    #    fastcgi_index  index.php;
+    #    fastcgi_param  SCRIPT_FILENAME  /scripts$fastcgi_script_name;
+    #    include        fastcgi_params;
+    #}
+
+    # deny access to .htaccess files, if Apache's document root
+    # concurs with angie's one
+    #
+    #location ~ /\.ht {
+    #    deny  all;
+    #}
+
+    location /console/ {
+
+    allow 192.168.0.0/16;
+    deny all;
+
+    auto_redirect on;
+
+    alias /usr/share/angie-console-light/html/;
+    # Только во FreeBSD:
+    # alias /usr/local/www/angie-console-light/html/;
+    index index.html;
+
+    location /console/api/ {
+        api /status/;
+    }
+
+    }
+}
