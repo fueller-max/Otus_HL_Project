@@ -61,7 +61,7 @@ variable vm_configs{
       }
     "kub-master-3" = { 
         vm_id       =  153
-        name        =  "kub-master-2"
+        name        =  "kub-master-3"
         clone       =  "Ubuntu2404-20GB"
         memory      =  4096
         cores       =  2

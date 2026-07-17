@@ -1,3 +1,1 @@
-balancer_vip: "10.10.30.100"
-
 deploy_user: "deploy"

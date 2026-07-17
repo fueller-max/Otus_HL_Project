@@ -1,8 +1,8 @@
 upstream ceph_dashboard {
     zone backend 1m;
-    server {{ ceph_nodes[0] }};  
-    server {{ ceph_nodes[1] }} backup;
-    server {{ ceph_nodes[2] }} backup;
+    server {{ ceph_nodes[0] }} max_fails=1 fail_timeout=5s;  
+    server {{ ceph_nodes[1] }} max_fails=1 fail_timeout=5s;
+    server {{ ceph_nodes[2] }} max_fails=1 fail_timeout=5s;
 }
 
 
@@ -19,6 +19,8 @@ server {
 
 
     location /{
+
+        proxy_next_upstream error timeout http_500 http_503; # server failed if it returns 500/503 response
 
         proxy_pass https://ceph_dashboard ;
 		proxy_ssl_verify off;
