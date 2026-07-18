@@ -1,0 +1,36 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: rook-ceph-csi-config
+  namespace: rook-ceph
+data:
+  # The driver expects a JSON array under the config.json key
+  config.json: |
+    [
+      {
+        "clusterID": "rook-ceph",
+        "monitors": [
+          "10.10.80.91:6789",
+          "10.10.80.92:6789",
+          "10.10.80.93:6789"
+        ]
+      }
+    ]
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ceph-csi-config
+  namespace: rook-ceph
+data:
+  config.json: |
+    [
+      {
+        "clusterID": "rook-ceph",
+        "monitors": [
+          "10.10.80.91:6789",
+          "10.10.80.92:6789",
+          "10.10.80.93:6789"
+        ]
+      }
+    ]
