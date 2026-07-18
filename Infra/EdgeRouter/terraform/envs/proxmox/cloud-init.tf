@@ -40,6 +40,13 @@ resource "proxmox_vm_qemu" "cloud-init" {
     tag = 0
   }
 
+  network {                                  # Lan3: Public ext net
+    id = 2
+    model = "virtio"
+    bridge = each.value.bridge2 
+    tag = 0
+  }
+
  
   disks {                                    # Setup disks
     ide {
@@ -64,6 +71,7 @@ resource "proxmox_vm_qemu" "cloud-init" {
   ipconfig0 = each.value.ip_conf0
   nameserver = "8.8.8.8"
   ipconfig1 = each.value.ip_conf1
+  ipconfig2 = each.value.ip_conf2
 
   # Setup user / SSH key for access
   ciuser = "deploy"

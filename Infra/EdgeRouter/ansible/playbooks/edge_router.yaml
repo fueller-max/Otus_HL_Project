@@ -3,12 +3,13 @@
   hosts: routers
   become: true
   vars:
-    dmz_service_ip: "10.10.30.1"
+    dmz_service_ip: "10.10.30.150"
     dmz_port_http:  "80"
     dmz_port_https: "443"
     admin_ip:       "192.168.60.20"
-    WAN_IF:         "eth0"
+    WAN_IF:         "eth2"
     DMZ_IF:         "eth1"
+    INT_IF:         "eth0"
 
   tasks:
   

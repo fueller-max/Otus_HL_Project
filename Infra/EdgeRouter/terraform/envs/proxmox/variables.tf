@@ -22,8 +22,10 @@ variable vm_configs{
     vm_state    =  string 
     bridge0     =  string
     bridge1     =  string
+    bridge2     =  string
     ip_conf0    =  string
     ip_conf1    =  string
+    ip_conf2    =  string
     start_at_node_boot =  bool  
   }))
 
@@ -40,6 +42,8 @@ variable vm_configs{
         ip_conf0    =  "ip=192.168.70.100/24,gw=192.168.70.1"
         bridge1     =  "vmbr3"
         ip_conf1    =  "ip=10.10.30.2/24"
+        bridge2     =  "vmbr10"
+        ip_conf2    =  "ip=203.0.113.9/24"
         start_at_node_boot =  true
       }  
    }         

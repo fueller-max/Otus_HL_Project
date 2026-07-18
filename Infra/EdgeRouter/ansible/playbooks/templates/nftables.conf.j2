@@ -4,6 +4,7 @@ flush ruleset
 # define interfaces
 define wan_if  = "{{ WAN_IF }}"
 define dmz_if  = "{{ DMZ_IF }}"
+define int_if  = "{{ INT_IF }}"
 
 #define admin ip
 define admin_ip = "{{ admin_ip }}"
@@ -28,13 +29,18 @@ table inet filter {
         icmp type echo-request limit rate 5/second accept
      }
 
-     # accept ssh for admin ip from wan side
-     chain input_wan {
+     # accept ssh for admin ip from int side
+     chain input_int {
         ip saddr $admin_ip tcp dport ssh accept
      }
 
      #input for dmz
      chain input_dmz {
+        jump icmp_ping
+     }
+
+     #input for wan
+     chain input_wan {
         jump icmp_ping
      }
 
@@ -48,8 +54,8 @@ table inet filter {
         type filter hook input priority filter; policy drop;
 
         ct state vmap { established : accept, related : accept, invalid : drop }
-        iifname vmap { lo : accept, $wan_if : jump input_wan, \
-                       $dmz_if : jump input_dmz}
+        iifname vmap { lo : accept, $int_if : jump input_int, \
+                       $dmz_if : jump input_dmz, $wan_if : jump input_wan}
                        
         # Log and drop everything else reaching the end of the forward chain
         jump log_and_drop               
