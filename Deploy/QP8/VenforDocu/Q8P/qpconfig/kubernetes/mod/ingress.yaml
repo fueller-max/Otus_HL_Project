@@ -1,0 +1,54 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: qp8-cms
+  namespace: qp8
+  annotations:
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    # Опционально: базовая авторизация только для админки (не для API/фронтенда)
+    # nginx.ingress.kubernetes.io/auth-type: basic
+    # nginx.ingress.kubernetes.io/auth-secret: basic-auth-secret
+    # nginx.ingress.kubernetes.io/auth-realm: "Authentication Required"
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - qp.test
+      secretName: qp-tls-secret
+  rules:
+    - host: qp.test
+      http:
+        paths:
+          # Админка QP8
+          - path: /admin(/|$)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: qp
+                port:
+                  number: 80
+          # GraphQL API
+          - path: /graphql(/|$)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: qp
+                port:
+                  number: 80
+          # REST API (если используется)
+          - path: /api(/|$)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: qp
+                port:
+                  number: 80
+          # Корень — сюда позже можно прицепить фронтенд
+          - path: /(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: qp
+                port:
+                  number: 80

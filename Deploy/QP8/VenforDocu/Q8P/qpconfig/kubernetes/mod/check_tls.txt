@@ -1,0 +1,10 @@
+# HTTP → должен редиректить на HTTPS
+curl -I http://qp.test/admin
+
+# HTTPS → должен отдавать HTML страницы входа (без ошибок сертификата, если самоподписанный — добавьте -k)
+curl -v https://qp.test/admin
+
+# GraphQL через HTTPS
+curl -v -H "Content-Type: application/json" \
+  -d '{"query":"{ __schema { types { name } } }"}' \
+  https://qp.test/graphql
