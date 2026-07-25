@@ -1,0 +1,11 @@
+---
+- name: Install Grafana (Docker & Grafana)
+  hosts: monitoring
+  become: true
+  vars:
+    grafana_url: "http://192.168.70.80"
+    grafana_url_p: "http://192.168.70.80:3000/" 
+  
+  roles:
+    - role: install_docker
+    - role: grafana_docker

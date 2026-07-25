@@ -1,0 +1,8 @@
+---
+- name: Install Node Exporter on monitoried nodes
+  hosts: monitoried
+  become: true
+  collections:
+          - prometheus.prometheus
+  roles:
+          - node_exporter  

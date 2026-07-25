@@ -1,0 +1,14 @@
+---
+# - name: Install Prometheus
+#   hosts: monitoring
+#   become: true
+#   collections:
+#           - prometheus.prometheus
+#   roles:
+#           - prometheus   
+
+- name: Manage config for Prometheus 
+  hosts: monitoring
+  become: yes
+  roles:
+         - prometheus_cfg            

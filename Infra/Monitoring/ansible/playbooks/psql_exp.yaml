@@ -1,0 +1,8 @@
+---
+- name: Install Node Exporter on monitoried nodes
+  hosts:  psql-node-1, psql-node-2, psql-node-3
+  become: true
+  collections:
+          - prometheus.prometheus
+  roles:
+          - postgres_exporter 

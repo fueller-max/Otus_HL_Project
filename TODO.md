@@ -6,3 +6,5 @@
 - [ ] Recreate the third VM for Kub **DONE**
 
 - [ ] Organize fault-tolerant connection fluentbeat->Elastic
+
+- [ ] Implement Kubernetes monitoring 
