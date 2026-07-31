@@ -24,6 +24,24 @@ sudo pg_basebackup -h localhost -p 5432 -U replicator -D /var/lib/postgresql/bac
 sudo ceph -s
 ```
 
+```bash
+sudo ceph orch ps #see all running daemons 
+sudo ceph orch ls
+```
+
+```bash
+sudo ceph orch daemon redeploy osd.1 # Redeploy OSD
+```
+
+```bash
+sudo ceph orch restart alertmanager # restart service
+
+```
+
+```bash
+sudo ceph orch daemon restart mds.lab_fs.ceph-node-1.xncvwj # restat daemon
+```
+
 #### 3. Kuberenetes
 
 ```bash

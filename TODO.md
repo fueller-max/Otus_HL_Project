@@ -5,8 +5,10 @@
 
 - [ ] Recreate the third VM for Kub **DONE**
 
-- [ ] Organize fault-tolerant connection fluentbeat->Elastic
+- [ ] Organize fault-tolerant connection fluentbeat->Elastic **DONE**
 
-- [ ] Implement Kubernetes monitoring 
+- [ ] Implement Kubernetes monitoring **DONE**
 
 - [ ] In the future organize access of postgres-exp to Patroni` managed cluster based on the config
+
+- [ ] Alerts in Grafana
