@@ -1,8 +1,6 @@
 ### Step 1: Deploy kube-state-metrics as a NodePort
 
-```bash
-kubectl apply -f kube-state-metrics-exposed.yaml
-```
+apply files in folder "kube-state-metrics"
 
 ### Step 2. Configure HAProxy
 
