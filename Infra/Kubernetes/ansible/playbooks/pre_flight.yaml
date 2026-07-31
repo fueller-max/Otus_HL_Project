@@ -1,6 +1,6 @@
 ---
 - name: Basic hosts management. Setup routes, firewall and etc...
-  hosts: kub_worker_nodes
+  hosts: kub_loadbalancers_nodes #, kub_worker_nodes
   become: true
   vars:
     # 1. Targets the interface that matches the 10.10.x.x block

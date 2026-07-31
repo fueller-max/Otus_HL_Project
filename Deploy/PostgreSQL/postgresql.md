@@ -13,6 +13,10 @@ pg_restore -Fc -d 'postgresql://postgres:new_superuser_password@192.168.70.74:50
 
 ### 3.Run current.sql
 
+```bash
+psql -d 'postgresql://postgres:new_superuser_password@192.168.70.74:5000/demosite' -f '/home/maksim/Downloads/qpdb/current.sql'
+```
+
 Before run: 
 
 ```bash

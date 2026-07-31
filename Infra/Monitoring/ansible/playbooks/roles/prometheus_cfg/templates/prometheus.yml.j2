@@ -57,5 +57,16 @@ scrape_configs:
         - '{{ hostvars[host]['ansible_host'] }}:9187'
 {% endfor %}  
 
+ # ---- Kubernetes Kubernetes Cluster State Metrics Balancer 
+    # ---- Kubernetes Cluster-Specific Metrics via HAProxy VIP
+  - job_name: kubernetes-cluster-state
+    static_configs:
+      - targets:
+        - '{{ k8s_cluster_state_metrics_balancer_ip }}' # <--- Keepalived VIP
+
 scrape_config_files:
   - scrape_configs/*
+
+
+
+

@@ -8,3 +8,5 @@
 - [ ] Organize fault-tolerant connection fluentbeat->Elastic
 
 - [ ] Implement Kubernetes monitoring 
+
+- [ ] In the future organize access of postgres-exp to Patroni` managed cluster based on the config

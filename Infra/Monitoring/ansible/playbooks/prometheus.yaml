@@ -10,5 +10,7 @@
 - name: Manage config for Prometheus 
   hosts: monitoring
   become: yes
+  vars:
+    k8s_cluster_state_metrics_balancer_ip: 10.10.30.100:32080
   roles:
          - prometheus_cfg            

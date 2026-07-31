@@ -1,0 +1,51 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: qp-storage
+  namespace: qp8
+  annotations:
+    cert-manager.io/cluster-issuer: "trusted-lab-issuer"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+spec:
+  ingressClassName: nginx # <-- Modern alternative to ingress.class
+  tls:
+  - hosts:
+    - qp-storage.test
+    secretName: qp-storage-tls-cert # <-- Cert-manager will auto-create this
+  rules:
+  - host: qp-storage.test
+    http:
+      paths:
+      - backend:
+          service:
+            name: qp-storage
+            port:
+              number: 80
+        path: /
+        pathType: Prefix
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: qp
+  namespace: qp8
+  annotations:
+    cert-manager.io/cluster-issuer: "trusted-lab-issuer"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+spec:
+  ingressClassName: nginx # <-- Modern alternative to ingress.class
+  tls:
+  - hosts:
+    - qp.test
+    secretName: qp-tls-cert # <-- Cert-manager will auto-create this
+  rules:
+  - host: qp.test
+    http:
+      paths:
+      - backend:
+          service:
+            name: qp
+            port:
+              number: 80
+        path: /
+        pathType: Prefix

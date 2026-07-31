@@ -37,3 +37,22 @@ listen stats
     stats uri /stats
     stats realm Haproxy\ Statistics
     stats auth admin:strongpassword
+
+# =====================================================================
+#  FOR KUBERNETES MONITORING (NODEPORT)
+# =====================================================================
+
+frontend k8s_metrics_front
+    bind *:32080
+    mode tcp
+    description "Kubernetes Cluster State Metrics Balancer"
+    default_backend k8s_metrics_back
+
+backend k8s_metrics_back
+    mode tcp
+    option tcp-check
+    balance roundrobin
+    # Reusing your Ansible variables structure for master nodes
+    server master-node-1 {{ masters[0] }}:32080 check
+    server master-node-2 {{ masters[1] }}:32080 check
+    server master-node-3 {{ masters[2] }}:32080 check
