@@ -5,24 +5,25 @@ metadata:
   namespace: kube-system
   labels:
     k8s-app: fluent-bit-logging
+    version: v1
 spec:
   selector:
     matchLabels:
-      name: fluent-bit
+      k8s-app: fluent-bit-logging
   template:
     metadata:
       labels:
-        name: fluent-bit
+        k8s-app: fluent-bit-logging
+        version: v1
     spec:
       serviceAccountName: fluent-bit
-      nodeSelector:
-        kubernetes.io/os: linux
       containers:
       - name: fluent-bit
-        image: fluent/fluent-bit:latest
-        # FIXED: Reverted to default execution parameters, bypassing the upstream.conf flag
-        command: ["/fluent-bit/bin/fluent-bit"]
-        args: ["-c", "/fluent-bit/etc/fluent-bit.conf"]
+        image: cr.fluentbit.io/fluent/fluent-bit:5.0.9
+        imagePullPolicy: Always
+        ports:
+          - containerPort: 2020
+            name: metrics
         volumeMounts:
         - name: varlog
           mountPath: /var/log
@@ -31,6 +32,7 @@ spec:
           readOnly: true
         - name: config
           mountPath: /fluent-bit/etc/
+      terminationGracePeriodSeconds: 10
       volumes:
       - name: varlog
         hostPath:
@@ -41,4 +43,3 @@ spec:
       - name: config
         configMap:
           name: fluent-bit-config
-

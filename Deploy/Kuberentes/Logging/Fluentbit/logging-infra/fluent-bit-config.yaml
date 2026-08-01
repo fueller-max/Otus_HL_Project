@@ -32,7 +32,6 @@ data:
         Merge_Log_Key       log_processed
         Keep_Log            Off
     
-     # --- New Filter to Silence VolumeSnapshotContent Errors ---
     [FILTER]
         Name                grep
         Match               kube.*
@@ -49,7 +48,7 @@ data:
         Suppress_Type_Name  On
         tls                 On
         tls.verify          Off
-        http_api_key        X1lBMWtKOEJ6VzEyTDVhYUtQTXI6dTZHUENhOGtjTmt2X1o2MVdmRVpWQQ==
+        http_api_key        X1l*************************
         Retry_Limit         False
         net.keepalive       On
         net.keepalive_idle_timeout 60
