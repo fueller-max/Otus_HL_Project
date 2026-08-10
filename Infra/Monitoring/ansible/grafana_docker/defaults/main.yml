@@ -10,6 +10,3 @@ dir_alerting:           "/etc/grafana/alerting"
 role_dir:              "/home/ansible/PROJECTS/WikiDeploy/playbooks/monitoring/roles/grafana_docker/"
 
 
-grafana_username: "admin"
-grafana_password: "grafana"
-

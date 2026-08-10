@@ -1,8 +1,0 @@
-#SPDX-License-Identifier: MIT-0
----
-# vars file for grafana_docker
-
-
-telegram_uid: "af5em1eptifi8e"
-telegram_bottoken: "8512759776:AAHXFanEMhsvOpZ7pGqzIwACetobo3aUbD0"
-telegram_chatid: "1737016664"

@@ -1,8 +1,8 @@
-# - name: Install & Provision Elastic Search
-#   hosts: es
-#   become: true
-#   roles:
-#         - role: elastic-search 
+- name: Install & Provision Elastic Search
+  hosts: es
+  become: true
+  roles:
+        - role: elastic-search 
 
 - name: Install & Pre-Provision Kibana
   hosts: kibana

@@ -53,9 +53,7 @@
           - "{{ grafana_persitent_data }}:/var/lib/grafana"                # Mount volume for persistent data
           - "{{ dir_datasources }}:/etc/grafana/provisioning/datasources"
           - "{{ dir_alerting }}:/etc/grafana/provisioning/alerting"
-    env:
-          GF_SECURITY_ADMIN_USER: "{{ grafana_username }}"
-          GF_SECURITY_ADMIN_PASSWORD: "{{ grafana_password }}"
+    env: "{{ base_grafana_env | combine(smtp_grafana_env if SMTP_Enabled | bool else {}) }}"
 
 - name: Wait for container port to be available
   ansible.builtin.wait_for:

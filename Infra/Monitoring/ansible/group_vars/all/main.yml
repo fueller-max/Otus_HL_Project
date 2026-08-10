@@ -1,0 +1,22 @@
+#SPDX-License-Identifier: MIT-0
+---
+# vars file for grafana_docker
+SMTP_Enabled: true
+
+base_grafana_env:
+  GF_SECURITY_ADMIN_USER: "{{ grafana_username }}"      # Reference vault
+  GF_SECURITY_ADMIN_PASSWORD: "{{ grafana_password }}"  # Reference vault 
+
+smtp_grafana_env:
+  GF_SMTP_ENABLED: "true"
+  GF_SMTP_HOST: "smtp.gmail.com:587"
+  GF_SMTP_USER: "{{ vault_smtp_user }}"         # Reference vault 
+  GF_SMTP_PASSWORD: "{{ vault_smtp_password }}" # Reference vault 
+  GF_SMTP_FROM_ADDRESS: "{{ vault_smtp_user }}"
+  GF_SMTP_FROM_NAME: "Grafana Alerts" 
+  GF_SMTP_STARTTLS_ENABLED: "true"
+  GF_SMTP_SKIP_VERIFY: "false"
+
+telegram_uid: "af5em1eptifi8e"
+telegram_bottoken: "8512759776:AAHXFanEMhsvOpZ7pGqzIwACetobo3aUbD0"
+telegram_chatid: "1737016664"

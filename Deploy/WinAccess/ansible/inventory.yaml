@@ -1,0 +1,52 @@
+all:
+  children:
+     lab:
+       hosts:
+        monitoring-1:
+          ansible_host: 192.168.70.80
+        kub-master-1:
+          ansible_host: 192.168.70.48
+        kub-master-2:
+          ansible_host: 192.168.70.49
+        kub-master-3:
+          ansible_host: 192.168.70.50
+        kub-lb-1:
+          ansible_host: 192.168.70.51   
+        kub-lb-2:
+          ansible_host: 192.168.70.52
+        kub-worker-1:
+          ansible_host: 192.168.70.53
+        kub-worker-2:
+          ansible_host: 192.168.70.54
+        es-node1:
+          ansible_host: 192.168.70.61
+        es-node2:
+          ansible_host: 192.168.70.62  
+        es-node3:
+          ansible_host: 192.168.70.63
+        kib-node-1:
+          ansible_host: 192.168.70.66
+        psql-ha-1:
+          ansible_host: 192.168.70.74
+        psql-ha-2:
+          ansible_host: 192.168.70.75
+        psql-node-1:
+          ansible_host: 192.168.70.71
+        psql-node-2:
+          ansible_host: 192.168.70.72
+        psql-node-3:
+          ansible_host: 192.168.70.73  
+        ceph-node-1:
+          ansible_host: 192.168.70.91
+        ceph-node-2:
+          ansible_host: 192.168.70.92
+        ceph-node-3:
+          ansible_host: 192.168.70.93
+        router-edge-1:
+          ansible_host: 192.168.70.100
+        router-internal-1:
+          ansible_host: 192.168.70.101
+  vars:
+      ansible_user: deploy
+      ansible_connection: ssh 
+      ansible_python_interpreter : /usr/bin/python3.12   

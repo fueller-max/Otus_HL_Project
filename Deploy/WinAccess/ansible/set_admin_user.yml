@@ -1,0 +1,15 @@
+---
+- name: Provision administrative user on target nodes
+  hosts: router-edge-1, router-internal-1
+  become: true  
+
+  tasks:
+    - name: Ensure the user exists with a password and admin group
+      ansible.builtin.user:
+        name: adminuser
+        password: "$6$j3VBa2g7w1XijNuS$e.Nr0YhOtmVKpx7UpEgXAy3PQ2Ke8aT9TPU6x21nxR.FNUY.L.rS..TKq41EaNtt2FTD.wnz/WG2lfZ1Z3.r2/" 
+        groups: 
+          - sudo  # 
+        append: true  # Ensures existing group memberships are not overwritten
+        shell: /bin/bash
+        create_home: true
