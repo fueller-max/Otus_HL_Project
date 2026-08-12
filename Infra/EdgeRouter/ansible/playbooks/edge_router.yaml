@@ -24,10 +24,14 @@
         dest: /etc/nftables.conf
         owner: root
         group: root 
-        mode: '0644' 
+        mode: '0644'
+      notify: Reload nftables   
  
-    - name: Apply firewall rules
-      shell: nft -f /etc/nftables.conf
+    - name: Ensure nftables service is enabled and started
+      ansible.builtin.systemd:
+        name: nftables
+        enabled: true
+        state: started
 
     - name: Setup package forwarding
       ansible.posix.sysctl:
@@ -36,3 +40,10 @@
         sysctl_file: /etc/sysctl.conf
         state: present
         reload: true
+
+  handlers:
+    - name: Reload nftables
+      ansible.builtin.systemd:
+        name: nftables
+        state: reloaded
+    
