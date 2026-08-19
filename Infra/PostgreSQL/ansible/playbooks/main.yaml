@@ -14,3 +14,14 @@
   roles:
         - role: haproxy
         - role: keepalived     
+
+- name: install Fluent-bit
+  hosts: postgres
+  become: true
+  vars:
+    FLUENT_BIT_RELEASE_VERSION: "5.0"
+    k8s_elastic_endpoint: 10.10.30.151
+    logstash_prefix: postgres-cluster-logs 
+    log_path: /var/log/patroni/*.log
+  roles:
+    - role: fluent-bit

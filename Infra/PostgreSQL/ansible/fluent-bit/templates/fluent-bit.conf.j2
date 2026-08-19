@@ -1,0 +1,38 @@
+[SERVICE]
+    Flush        1
+    Daemon       Off
+    Log_Level    info
+    Parsers_File /etc/fluent-bit/parsers.conf  
+
+[INPUT]
+    Name              tail
+    Tag               postgres.*
+    # Adjust this path if your PostgreSQL logs are stored elsewhere 
+    # (e.g., /var/log/postgresql/postgresql-15-main.log)
+    Path              {{ log_path }}
+    Parser            postgresql
+    DB                /var/log/fluent-bit/postgres_log.db
+    Mem_Buf_Limit     5MB
+    Skip_Long_Lines   On
+
+[FILTER]
+    Name          modify
+    Match         postgres.*
+    # Adds a helpful structural field so you can easily query Postgres logs in Kibana
+    Add log_source postgres_vm_host
+
+[OUTPUT]
+    Name                es
+    Match               *
+    Host                {{ k8s_elastic_endpoint}} 
+    Port                9200
+    Logstash_Format     On
+    Logstash_Prefix     {{ logstash_prefix }}
+    Type                _doc
+    Suppress_Type_Name  On
+    tls                 On
+    tls.verify          Off
+    http_api_key        {{ es_token }}
+    Retry_Limit         False
+    net.keepalive       On
+    net.keepalive_idle_timeout 60

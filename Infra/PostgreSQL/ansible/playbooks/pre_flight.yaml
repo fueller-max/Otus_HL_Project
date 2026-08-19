@@ -1,6 +1,6 @@
 ---
 - name: Basic hosts management. Setup routes, firewall and etc...
-  hosts: balancers
+  hosts:  postgres
   become: true
   vars:
     # 1. Targets the interface that matches the 10.10.x.x block
